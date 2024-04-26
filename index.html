@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta author="JP.Böhm" <title>Radiostation
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a id="pauseBtn" onclick="pauseVid()">Pause Video</a>
+    <a id="changeVid" onclick="changeVid()">Change Video</a>
+    <a id="changeStation" onclick="changeStation()">Next Station</a>
+
+    <div class="select">
+      <label class="select-label">Or switch to</label>
+      <select id="sender" class="select-text" required onchange="switchSender()">
+        <option value="0" disabled>another station here!</option>
+        <option value="0">Chillhop</option>
+        <option value="1">Rasta Radio</option>
+        <option value="2">60ies</option>
+        <option value="3">Klubradio</option>
+      </select>
+
+
+    </div>
+    <div id="radioContainer">
+      <p id="radioName"></p>
+      <audio src="http://streams.fluxfm.de/Chillhop/mp3-128/streams.fluxfm.de/" id="radioStream" autoplay="true"
+        controls="true" volume="1.0"></audio>
+    </div>
+  </div>
+  <div id="main">
+    <header class="v-header container">
+      <div class="fullscreen-video-wrap">
+        <video autoplay loop muted id="myVideo">
+          <source src="./img/bg0.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="header-overlay">
+        <span style="font-size:30px;cursor:pointer " id="menuBtn" onclick="openNav()">&#9776;</span>
+      </div>
+    </header>
+  </div>
+  <script>
+
+    // Get the Controls
+    var video = document.getElementById("myVideo");
+    var pauseBtn = document.getElementById("pauseBtn");
+    var changeVidBtn = document.getElementById("changeVid");
+    var menuBtn = document.getElementById("menuBtn")
+    var radioStream = document.getElementById("radioStream")
+    var radioName = document.getElementById("radioName")
+
+
+    //Sources
+    var srcRandomVid = [
+      './img/bg0.mp4',
+      './img/bg1.mp4',
+      './img/bg2.mp4',
+      './img/bg3.mp4',
+      './img/bg4.mp4',
+      './img/bg5.mp4',
+    ]
+    var srcRadnomRadio = [
+      { id: 1, name: 'Chillhop Radio', adress: 'http://streams.fluxfm.de/Chillhop/mp3-128/streams.fluxfm.de/' },
+      { id: 2, name: 'Rasta Radio', adress: 'http://streams.fluxfm.de/rastaradio/mp3-128/streams.fluxfm.de/' },
+      { id: 3, name: '60´s Radio', adress: 'http://streams.fluxfm.de/60er/mp3-128/streams.fluxfm.de/' },
+      { id: 4, name: 'Klub Radio', adress: 'http://streams.fluxfm.de/klubradio/mp3-128/audio/' }
+
+    ]
+
+
+    // Var for Radio and Video Change
+    var currentlyVideoPlaying = 1;
+    var currentRadioPlaying = 0
+    var currentlPlayingTime;
+
+    //Helperfunctions
+    function incrementSrcRandomVidCount() {
+      currentlyVideoPlaying += 1
+      if (currentlyVideoPlaying === srcRandomVid.length) {
+        currentlyVideoPlaying = 0
+      }
+    }
+
+    function incrementRadioCount() {
+      currentRadioPlaying += 1
+      if (currentRadioPlaying == srcRadnomRadio.length) {
+        currentRadioPlaying = 0
+      }
+    }
+
+    function setRadioName(name) {
+      radioName.innerHTML = name
+    }
+
+
+    //Controlfunctions
+
+
+
+    function switchSender() {
+      var sel = document.getElementById("sender");
+      var chosenRadiosender = sel.options[sel.selectedIndex].value;
+      console.log(chosenRadiosender);
+      radioStream.src = srcRadnomRadio[chosenRadiosender].adress
+      setRadioName(srcRadnomRadio[chosenRadiosender].name)
+
+    }
+
+
+    function pauseVid() {
+      if (video.paused) {
+        video.play();
+        pauseBtn.innerHTML = "Pause";
+      } else {
+        video.pause();
+        pauseBtn.innerHTML = "Play";
+      }
+    }
+
+    function changeStation() {
+      radioStream.src = srcRadnomRadio[currentRadioPlaying].adress
+      radioName.innerHTML = srcRadnomRadio[currentRadioPlaying].name
+      incrementRadioCount()
+    }
+
+    function changeVid() {
+      currentlyVideoPlayingTime = video.currentTime;
+      video.src = srcRandomVid[currentlyVideoPlaying]
+      incrementSrcRandomVidCount()
+      pauseBtn.innerHTML = "Pause";
+      video.load();
+      video.addEventListener('loadedmetadata', function () {
+        video.currentTime = currentlPlayingTime;
+      }, false);
+
+    }
+
+    //Navcontrol
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+      document.body.style.transition = "all 0.5s"
+      document.getElementById("mySidenav").style.opacity = "1"
+      menuBtn.style.opacity = "0"
+      setRadioName(srcRadnomRadio[currentRadioPlaying].name)
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft = "0";
+      document.getElementById("mySidenav").style.opacity = "0"
+      document.body.style.backgroundColor = "white";
+      menuBtn.style.opacity = "1"
+      menuBtn.style.transition = "all 1s"
+    }
+
+    document.ready = openNav()
+  </script>
+</body>
+
+</html>
