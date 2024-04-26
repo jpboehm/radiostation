@@ -8,9 +8,8 @@ Welcome to our Radiostation repository! Here, you'll find the codebase for a  we
 - **Timeless Template:** While our template has been around for a few years, its elegance and functionality remain timeless, providing users with a pleasant browsing experience.
 
 ### Technologies Used:
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** (Optional, if applicable)
-- **Additional Libraries/Frameworks:** (Specify any additional libraries or frameworks used)
+ HTML, CSS, JavaScript
+
 
 ### Usage:
 1. Clone the repository to your local machine.
